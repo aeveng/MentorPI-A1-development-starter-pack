@@ -1,2 +1,28 @@
 # MentorPI-A1-development-starter-pack
 This repository aims to provide a reasonable starting position for ROS2 development on the Raspberry Pi 5 based MentorPi robot platform from Hiwonder
+# Table of Contents
+
+- [General Information](#general-information)
+- [Basic Setup](#basic-setup)
+  - [Linux Setup](#linux-setup)
+    - [Install Additional Dependencies](#install-additional-dependencies)
+  - [Setup your ROS2 Workspace](#setup-your-ros2-workspace)
+  - [Set Environment Variables](#set-environment-variables)
+  - [Set User Permissions](#set-user-permissions)
+- [Testing](#testing)
+  - [Test the Camera](#test-the-camera)
+    - [Test the Camera with a connected Monitor](#test-the-camera-with-a-connected-monitor)
+    - [Test the Camera from a Remote Computer (a bit more advanced)](#test-the-camera-from-a-remote-computer-a-bit-more-advanced)
+  - [Test AprilTag](#test-apriltag)
+    - [Camera Calibration](#camera-calibration)
+    - [Rectification Pipeline](#rectification-pipeline)
+    - [AprilTag Node](#apriltag-node)
+  - [Test the LIDAR](#test-the-lidar)
+  - [Test SLAM](#test-slam)
+- [Quality of Life Additions and Some Tips](#quality-of-life-additions-and-some-tips)
+  - [Terminator](#terminator)
+  - [SSH Setup](#ssh-setup)
+  - [rviz2](#rviz2)
+  - [Multiple Robots on the Same Network](#multiple-robots-on-the-same-network)
+  - [About Standardization](#about-standardization)
+  - [How To Start Development](#how-to-start-development)
