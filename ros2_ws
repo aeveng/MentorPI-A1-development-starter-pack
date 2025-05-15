@@ -1,0 +1,79 @@
+cd ros2_ws/src
+
+# 1. Camera Node
+ros2 pkg create --build-type ament_python camera_test --dependencies rclpy sensor_msgs cv_bridge
+
+mkdir -p camera_test/camera_test
+touch camera_test/camera_test/__init__.py
+cat <<EOF > camera_test/camera_test/camera_node.py
+import rclpy
+from rclpy.node import Node
+from sensor_msgs.msg import Image
+from cv_bridge import CvBridge
+import cv2
+
+class CameraNode(Node):
+    def __init__(self):
+        super().__init__('camera_node')
+        self.publisher_ = self.create_publisher(Image, 'camera/image_raw', 10)
+        self.timer = self.create_timer(0.1, self.timer_callback)
+        self.cap = cv2.VideoCapture(0)
+        self.bridge = CvBridge()
+
+    def timer_callback(self):
+        ret, frame = self.cap.read()
+        if ret:
+            msg = self.bridge.cv2_to_imgmsg(frame, encoding='bgr8')
+            self.publisher_.publish(msg)
+
+def main(args=None):
+    rclpy.init(args=args)
+    node = CameraNode()
+    rclpy.spin(node)
+    node.destroy_node()
+    rclpy.shutdown()
+EOF
+
+cat <<EOF > camera_test/setup.py
+from setuptools import setup
+
+package_name = 'camera_test'
+
+setup(
+    name=package_name,
+    version='0.0.0',
+    packages=[package_name],
+    data_files=[
+        ('share/ament_index/resource_index/packages',
+            ['resource/' + package_name]),
+        ('share/' + package_name, ['package.xml']),
+    ],
+    install_requires=['setuptools'],
+    zip_safe=True,
+    maintainer='yourname',
+    maintainer_email='you@example.com',
+    description='Camera publisher node',
+    license='MIT',
+    tests_require=['pytest'],
+    entry_points={
+        'console_scripts': [
+            'camera_node = camera_test.camera_node:main',
+        ],
+    },
+)
+EOF
+
+cat <<EOF > camera_test/package.xml
+<?xml version="1.0"?>
+<package format="3">
+  <name>camera_test</name>
+  <version>0.0.0</version>
+  <description>Camera publisher node</description>
+  <maintainer email="you@example.com">Your Name</maintainer>
+  <license>MIT</license>
+  <buildtool_depend>ament_cmake</buildtool_depend>
+  <exec_depend>rclpy</exec_depend>
+  <exec_depend>sensor_msgs</exec_depend>
+  <exec_depend>cv_bridge</exec_depend>
+</package>
+EOF
